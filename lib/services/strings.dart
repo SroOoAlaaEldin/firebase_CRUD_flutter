@@ -32,4 +32,5 @@ class Strings {
   static final String statement_ch_data_user_found = "This is User Data Found";
   static final String statement_login_s = "You Logged Succefully!";
   static final String statement_login_error = "Cannot Logged!";
+  static final String statement_delete_account = "Error deleting";
 }

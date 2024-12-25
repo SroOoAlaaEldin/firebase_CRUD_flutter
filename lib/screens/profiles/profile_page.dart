@@ -155,7 +155,9 @@ class _ProfilePageState extends State<ProfilePage> {
                         ProfileOption(
                           icon: Icons.delete,
                           title: Strings.delete,
-                          onTap: () {},
+                          onTap: () {
+                            FirebaseService.deleteUserData(userEmail, context);
+                          },
                         ),
                         ProfileOption(
                           icon: Icons.logout,

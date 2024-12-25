@@ -1,20 +1,33 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_s_flutter/screens/home_screen.dart';
 import 'package:firebase_s_flutter/screens/profiles/profile_page.dart';
 import 'package:firebase_s_flutter/screens/signup_screen.dart';
 import 'package:firebase_s_flutter/services/strings.dart';
 import 'package:flutter/material.dart';
 
 class FirebaseService {
-///////Function Of Delete Account from Firebase
-  static Future<void> deleteUserData() async {
+////////////////Function Of Delete Account from Firebase
+  static Future<void> deleteUserData(String email, BuildContext context) async {
     final FirebaseAuth auth = FirebaseAuth.instance;
     User? user = auth.currentUser;
-    try {} catch (e) {}
+    try {
+      if (user != null) {
+        await user.delete();
+      }
+      FirebaseFirestore.instance.collection('Users').doc(email).delete();
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const SignUpScreen(),
+        ),
+        (route) => false,
+      );
+    } catch (e) {
+      print(Strings.statement_delete_account);
+    }
   }
 
-  ///Fuction of Signup
+  ////////////////Fuction of Signup
   static void signUpAuth(String name, String email, String password,
       String phone, BuildContext context) async {
     final FirebaseAuth auth = FirebaseAuth.instance;
@@ -52,7 +65,7 @@ class FirebaseService {
     // saveUserData();
   }
 
-  //Function Of Login
+  ////////////////Function Of Login
   static Future<void> loginAuth(
       String email, String password, BuildContext context) async {
     final FirebaseAuth auth = FirebaseAuth.instance;
@@ -83,7 +96,7 @@ class FirebaseService {
     }
   }
 
-  ///Function Of SaveData
+  ///////////////Function Of SaveData
   static Future<void> saveUserData(
       String name, String email, String phone, String password) async {
     try {
@@ -103,7 +116,7 @@ class FirebaseService {
     }
   }
 
-  //Fucntion of Get data User Map
+  //////////////Fucntion of Get data User Map
   static Future<Map<String, dynamic>?> getUserData(
     String email,
     // BuildContext context
@@ -123,19 +136,19 @@ class FirebaseService {
     }
   }
 
-  ///Function Of Logout
+  //////////////Function Of Logout
   static Future<void> logout(BuildContext context) async {
     final FirebaseAuth auth = FirebaseAuth.instance;
     try {
       await auth.signOut();
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(Strings.statement_login_s),
-        backgroundColor: Color.fromARGB(255, 4, 109, 109),
+        backgroundColor: const Color.fromARGB(255, 4, 109, 109),
       ));
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
-          builder: (context) => SignUpScreen(),
+          builder: (context) => const SignUpScreen(),
         ),
         (route) => false,
       );
